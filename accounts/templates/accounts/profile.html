@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 style="text-align: center; color: white; background-color: blue; padding: 25px; font-size: 40px;"> {{user.username}} </h2>
+<main style="display: flex; justify-content: center; align-items: center; gap: 40px;margin-top: 400px;">
+    {% for post in posts %}
+
+     <a href="{% url 'post_page' post.id post.slug %}"> {{post.body|truncatewords:5}} </a>
+
+    {% endfor %}
+
+
+    {% if request.user.id == user.id %}
+        <a href="{% url 'create_page' %}"><button style="background-color: green; color: white; padding: 12px; border-radius: 8px; font-size: 20px;"> create</button></a>
+        <a href="{% url 'edit_page' %}"><button style="background-color: rgb(128, 0, 0); color: white; padding: 12px 28px; border-radius: 8px; font-size: 20px;"> Edit</button></a>
+
+    {% endif %}
+
+    {% if request.user.id != user.id  and not is_following %}
+        <a href="{% url 'follow_page' user.id %}"><button> {{user.follower_count}} follow</button></a>
+
+    {% elif request.user.id != user.id  and is_following %}
+        <a href="{% url 'unfollow_page' user.id %}"><button>unfollow</button></a>
+
+    {% endif %}
+
+</main>
+
+
+{% endblock %}
